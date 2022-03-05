@@ -1,6 +1,6 @@
 # K UI Laravel Fortify
 
-Front-end scafolding for [laravel/fortify](https://github.com/laravel/fortify) based on [kui-dashboard](https://github.com/kamona-ui/)
+Front-end scaffolding for [laravel/fortify](https://github.com/laravel/fortify) based on [kui-dashboard](https://github.com/kamona-ui/)
 
 [![License](https://img.shields.io/github/license/Kamona-WD/kui-laravel-fortify)](https://github.com/Kamona-WD/kui-laravel-fortify/blob/main/LICENSE.md)
 
