@@ -2,8 +2,6 @@
 
 Front-end scaffolding for [laravel/fortify](https://github.com/laravel/fortify) based on [kui-dashboard](https://github.com/kamona-ui/)
 
-[![License](https://img.shields.io/github/license/Kamona-WD/kui-laravel-fortify)](https://github.com/Kamona-WD/kui-laravel-fortify/blob/main/LICENSE.md)
-
 ##### [Figma file](https://www.figma.com/community/file/1019844542917981418/)
 
 ##### [Laravel breeze version](https://github.com/Kamona-WD/kui-laravel-breeze/)
