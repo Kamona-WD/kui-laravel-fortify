@@ -1,0 +1,38 @@
+{
+  "name": "kamona/kui-laravel-fortify",
+  "description": "Front-end scafolding for laravel/fortify based on kui-dashboard",
+  "keywords": [
+    "laravel",
+    "fortify",
+    "dashboard",
+    "k-ui",
+    "tailwindcss",
+    "auth",
+    "ui"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Kamona-WD/kui-laravel-fortify",
+  "authors": [
+    {
+      "name": "Ahmed Kamel",
+      "email": "ak3849909@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.3|^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "KUIFortify\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "KUIFortify\\KUIFortifyServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev"
+}
