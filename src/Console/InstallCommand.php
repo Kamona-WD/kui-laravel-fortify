@@ -13,7 +13,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    public $signature = 'kui-fortify:install {stack=blade : The development stack that should be replaced (blade,vue,vue-jsx,react)}
+    public $signature = 'kui-fortify:install {stack=blade : The development stack that should be replaced (blade,vue,react)}
                         {--composer=global : Absolute path to the Composer binary which should be used to install packages}';
 
     /**
@@ -41,11 +41,7 @@ class InstallCommand extends Command
         }
 
         if ($this->argument('stack') === 'vue') {
-            return $this->installVue('sfc');
-        }
-
-        if ($this->argument('stack') === 'vue-jsx') {
-            return $this->installVue('jsx');
+            return $this->installVue();
         }
 
         if ($this->argument('stack') === 'react') {
@@ -135,6 +131,7 @@ class InstallCommand extends Command
         $this->line('');
         $this->info('K UI scaffolding installed successfully.');
         $this->comment('Please execute the "npm install && npm run dev" command to build your assets.');
+        $this->line('');
 
         return 0;
     }
@@ -145,9 +142,108 @@ class InstallCommand extends Command
      * @param string $type
      * @return void
      */
-    protected function installVue($type)
+    protected function installVue()
     {
-        $this->error('Inertia vue stack will be available soon.');
+        // NPM Packages...
+        $this->updateNodePackages(function ($packages) {
+            return [
+                '@headlessui/vue' => '^1.5.0',
+                '@heroicons/vue' => '^1.0.6',
+                '@inertiajs/inertia' => '^0.11.0',
+                '@inertiajs/inertia-vue3' => '^0.6.0',
+                '@inertiajs/progress' => '^0.2.7',
+                '@tailwindcss/forms' => '^0.5.0',
+                '@vue/babel-plugin-jsx' => '^1.1.1',
+                '@vue/compiler-sfc' => '^3.2.31',
+                '@vueuse/core' => '^7.7.1',
+                'autoprefixer' => '^10.4.2',
+                'postcss' => '^8.4.7',
+                'postcss-import' => '^14.0.2',
+                'tailwindcss' => '^3.0.23',
+                'perfect-scrollbar' => '^1.5.5',
+                'vue' => '^3.2.31',
+                'vue-loader' => '^17.0.0',
+                'vue-toastification' => '^2.0.0-rc.5'
+            ] + $packages;
+        });
+
+        // Composer Packages
+        $this->requireComposerPackages('inertiajs/inertia-laravel:0.5.4', 'tightenco/ziggy:^1.4');
+
+        (new Filesystem)->cleanDirectory(resource_path('views'));
+
+        // Routes
+        copy(__DIR__ . '/../../stubs/vue/routes/web.php', base_path('routes/web.php'));
+
+        // Components + Pages...
+        (new Filesystem)->ensureDirectoryExists(resource_path('js/Components'));
+        (new Filesystem)->ensureDirectoryExists(resource_path('js/Composables'));
+        (new Filesystem)->ensureDirectoryExists(resource_path('js/Layouts'));
+        (new Filesystem)->ensureDirectoryExists(resource_path('js/Pages'));
+        (new Filesystem)->ensureDirectoryExists(resource_path('js/Toast'));
+
+        // Clean directories
+        (new Filesystem)->cleanDirectory(resource_path('js/Components'));
+        (new Filesystem)->cleanDirectory(resource_path('js/Composables'));
+        (new Filesystem)->cleanDirectory(resource_path('js/Layouts'));
+        (new Filesystem)->cleanDirectory(resource_path('js/Pages'));
+        (new Filesystem)->cleanDirectory(resource_path('js/Toast'));
+
+        // Copy
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../stubs/vue/resources/js/Components', resource_path('js/Components'));
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../stubs/vue/resources/js/Composables', resource_path('js/Composables'));
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../stubs/vue/resources/js/Layouts', resource_path('js/Layouts'));
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../stubs/vue/resources/js/Pages', resource_path('js/Pages'));
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../stubs/vue/resources/js/Toast', resource_path('js/Toast'));
+
+        // Tailwind / Assets / Webpack...
+        copy(__DIR__ . '/../../stubs/vue/resources/css/app.css', resource_path('css/app.css'));
+        copy(__DIR__ . '/../../stubs/vue/resources/js/app.js', resource_path('js/app.js'));
+
+        copy(__DIR__ . '/../../stubs/vue/tailwind.config.js', base_path('tailwind.config.js'));
+        copy(__DIR__ . '/../../stubs/vue/webpack.mix.js', base_path('webpack.mix.js'));
+        copy(__DIR__ . '/../../stubs/vue/webpack.config.js', base_path('webpack.config.js'));
+        copy(__DIR__ . '/../../stubs/vue/jsconfig.json', base_path('jsconfig.json'));
+        copy(__DIR__ . '/../../stubs/vue/.babelrc', base_path('.babelrc'));
+
+        // Layout Blade
+        copy(__DIR__ . '/../../stubs/vue/resources/views/app.blade.php', resource_path('views/app.blade.php'));
+
+        // Service Provider
+        copy(__DIR__ . '/../../stubs/vue/app/Providers/KUIFortifyServiceProvider.php', app_path('Providers/KUIFortifyServiceProvider.php'));
+
+        // User Model
+        copy(__DIR__ . '/../../stubs/vue/app/Models/User.php', app_path('Models/User.php'));
+
+        // Inertia Middleware
+        copy(__DIR__ . '/../../stubs/vue/app/Middleware/HandleInertiaRequests.php', app_path('Http/Middleware/HandleInertiaRequests.php'));
+
+        $this->replaceInFile(
+            '\Illuminate\Routing\Middleware\SubstituteBindings::class,',
+            "\Illuminate\Routing\Middleware\SubstituteBindings::class,\n\t\t\t\App\Http\Middleware\HandleInertiaRequests::class,",
+            config_path('app.php')
+        );
+
+        // Service Provider
+        $this->replaceInFile('/home', '/dashboard', app_path('Providers/RouteServiceProvider.php'));
+
+        $this->replaceInFile(
+            'App\Providers\RouteServiceProvider::class,',
+            "App\Providers\RouteServiceProvider::class,\n\t\tApp\Providers\FortifyServiceProvider::class,\n\t\tApp\Providers\KUIFortifyServiceProvider::class,",
+            config_path('app.php')
+        );
+
+        // Lang File
+        if ((new Filesystem)->exists(resource_path('lang'))) {
+            copy(__DIR__ . '/../../stubs/vue/lang/ar.json', resource_path('lang/ar.json'));
+        } else if ((new Filesystem)->exists(base_path('lang'))) {
+            copy(__DIR__ . '/../../stubs/vue/lang/ar.json', base_path('lang/ar.json'));
+        }
+
+        $this->line('');
+        $this->info('K UI scaffolding installed successfully.');
+        $this->comment('Please execute the "npm install && npm run dev" command to build your assets.');
+        $this->line('');
         return 0;
     }
 
