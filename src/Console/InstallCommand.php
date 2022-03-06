@@ -163,7 +163,8 @@ class InstallCommand extends Command
                 'perfect-scrollbar' => '^1.5.5',
                 'vue' => '^3.2.31',
                 'vue-loader' => '^17.0.0',
-                'vue-toastification' => '^2.0.0-rc.5'
+                'vue-toastification' => '^2.0.0-rc.5',
+                'laravel-vue-i18n' => '^1.2.0'
             ] + $packages;
         });
 
