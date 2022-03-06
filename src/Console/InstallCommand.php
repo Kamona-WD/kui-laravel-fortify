@@ -222,7 +222,7 @@ class InstallCommand extends Command
         $this->replaceInFile(
             '\Illuminate\Routing\Middleware\SubstituteBindings::class,',
             "\Illuminate\Routing\Middleware\SubstituteBindings::class,\n\t\t\t\App\Http\Middleware\HandleInertiaRequests::class,",
-            config_path('app.php')
+            app_path('Http/Kernel.php')
         );
 
         // Service Provider

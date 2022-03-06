@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Laravel\Fortify\Fortify;
 use Inertia\Inertia;
+use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 
 class KUIFortifyServiceProvider extends ServiceProvider
 {
@@ -26,7 +27,10 @@ class KUIFortifyServiceProvider extends ServiceProvider
     public function boot()
     {
         Fortify::loginView(function () {
-            return Inertia::render('Auth/Login');
+            return Inertia::render('Auth/Login', [
+                'canResetPassword' => Route::has('password.request'),
+                'status' => session('status'),
+            ]);
         });
 
         Fortify::registerView(function () {
@@ -34,15 +38,22 @@ class KUIFortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::requestPasswordResetLinkView(function () {
-            return Inertia::render('Auth/ForgotPassword');
+            return Inertia::render('Auth/ForgotPassword', [
+                'status' => session('status'),
+            ]);
         });
 
         Fortify::resetPasswordView(function ($request) {
-            return Inertia::render('Auth/ResetPassword', ['request' => $request]);
+            return Inertia::render('Auth/ResetPassword', [
+                'email' => $request->input('email'),
+                'token' => $request->route('token'),
+            ]);
         });
 
         Fortify::verifyEmailView(function () {
-            return Inertia::render('Auth/VerifyEmail');
+            return Inertia::render('Auth/VerifyEmail', [
+                'status' => session('status'),
+            ]);
         });
 
         Fortify::confirmPasswordView(function () {

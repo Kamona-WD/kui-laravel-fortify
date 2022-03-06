@@ -36,7 +36,7 @@
 
                 <div>
                     <Button class="w-full justify-center" :disabled="form.processing">
-                        {{ $(`Reset Password`) }}
+                        {{ $t(`Reset Password`) }}
                     </Button>
                 </div>
             </div>
