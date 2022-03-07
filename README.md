@@ -38,6 +38,17 @@ php artisan kui-fortify:install blade # This command will publish laravel/fortif
 
 # then
 npm install && npm run dev # or yarn && yarn dev
+
+# Laravel mix will compile successfully, but with 1 warning `Module not found: Error: Can't resolve '../../lang'`.
+# It will work but you can fix it by remove trycatch in `app.js` and import lang file like this:
+
+# laravel 9
+# resolve: (lang) => import(`../../lang/${lang}.json`),
+
+# laravel < 9
+# resolve: (lang) => import(`../lang/${lang}.json`),
+
+# Until we fix it.
 ```
 
 4. Configure your database.
