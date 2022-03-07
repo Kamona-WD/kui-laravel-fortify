@@ -7,6 +7,10 @@ import { i18nVue } from 'laravel-vue-i18n';
 import Toast from 'vue-toastification';
 import composer from '../../composer.json';
 
+const isLaravel9 = composer.require["laravel/framework"].startsWith("^9.")
+    ? true
+    : false;
+
 const appName =
     window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -17,14 +21,17 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(i18nVue, {
+                // TODO: Use a real solution.
                 resolve: (lang) => {
-                    // TODO: Use a real solution.
-                    const dirLang = composer.require[
-                        "laravel/framework"
-                    ].startsWith("^9.")
-                        ? `../../lang`
-                        : `../lang`;
-                    import(`${dirLang}/${lang}.json`);
+                    if (isLaravel9) {
+                        try {
+                            return import(`../../lang/${lang}.json`);
+                        } catch (error) {}
+                    } else {
+                        try {
+                            return import(`../lang/${lang}.json`);
+                        } catch (error) {}
+                    }
                 },
             })
             .use(Toast, {
