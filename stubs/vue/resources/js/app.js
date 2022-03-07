@@ -5,11 +5,6 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { i18nVue } from 'laravel-vue-i18n';
 import Toast from 'vue-toastification';
-import composer from '../../composer.json';
-
-const isLaravel9 = composer.require["laravel/framework"].startsWith("^9.")
-    ? true
-    : false;
 
 const appName =
     window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -21,18 +16,7 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(i18nVue, {
-                // TODO: Use a real solution.
-                resolve: (lang) => {
-                    if (isLaravel9) {
-                        try {
-                            return import(`../../lang/${lang}.json`);
-                        } catch (error) {}
-                    } else {
-                        try {
-                            return import(`../lang/${lang}.json`);
-                        } catch (error) {}
-                    }
-                },
+                resolve: (lang) => import(`../lang/${lang}.json`),
             })
             .use(Toast, {
                 hideProgressBar: true,

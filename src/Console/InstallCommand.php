@@ -235,9 +235,11 @@ class InstallCommand extends Command
         );
 
         // Lang File
-        if ((new Filesystem)->exists(resource_path('lang'))) {
+        if ((new Filesystem)->exists(resource_path('lang'))) { // Laravel < 9
             copy(__DIR__ . '/../../stubs/vue/lang/ar.json', resource_path('lang/ar.json'));
-        } else if ((new Filesystem)->exists(base_path('lang'))) {
+            copy(__DIR__ . '/../../stubs/vue/lang/en.json', resource_path('lang/en.json'));
+        } else if ((new Filesystem)->exists(base_path('lang'))) { // Laravel 9
+            $this->replaceInFile('../lang', '../../lang', resource_path('js/app.js'));
             copy(__DIR__ . '/../../stubs/vue/lang/ar.json', base_path('lang/ar.json'));
         }
 
