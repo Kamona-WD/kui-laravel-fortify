@@ -26,7 +26,7 @@
 import { useSlots, computed } from 'vue'
 import SectionTitle from '@/Components/SectionTitle'
 
-const emits = defineEmits(['submitted'])
+defineEmits(['submitted'])
 
 const slots = useSlots()
 

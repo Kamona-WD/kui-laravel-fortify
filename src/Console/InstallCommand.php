@@ -169,7 +169,7 @@ class InstallCommand extends Command
         });
 
         // Composer Packages
-        $this->requireComposerPackages('inertiajs/inertia-laravel:0.5.4', 'tightenco/ziggy:^1.4');
+        $this->requireComposerPackages('inertiajs/inertia-laravel:0.5.4', 'laravel/sanctum:^2.8', 'tightenco/ziggy:^1.4');
 
         (new Filesystem)->cleanDirectory(resource_path('views'));
 
@@ -203,7 +203,6 @@ class InstallCommand extends Command
 
         copy(__DIR__ . '/../../stubs/vue/tailwind.config.js', base_path('tailwind.config.js'));
         copy(__DIR__ . '/../../stubs/vue/webpack.mix.js', base_path('webpack.mix.js'));
-        copy(__DIR__ . '/../../stubs/vue/webpack.config.js', base_path('webpack.config.js'));
         copy(__DIR__ . '/../../stubs/vue/jsconfig.json', base_path('jsconfig.json'));
         copy(__DIR__ . '/../../stubs/vue/.babelrc', base_path('.babelrc'));
 

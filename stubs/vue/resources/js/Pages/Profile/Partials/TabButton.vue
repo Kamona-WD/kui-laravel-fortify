@@ -16,7 +16,7 @@
 <script setup>
 import { Tab } from '@headlessui/vue'
 
-const props = defineProps({
+defineProps({
     title: {
         type: String,
     }

@@ -65,7 +65,7 @@ import TwoFactorAuthenticationForm from '@/Pages/Profile/Partials/TwoFactorAuthe
 import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm'
 import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm'
 
-const props = defineProps({
+defineProps({
     sessions: {
         type: Array,
     },

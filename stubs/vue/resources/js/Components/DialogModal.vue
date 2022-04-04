@@ -24,7 +24,7 @@
 <script setup>
 import Modal from '@/Components/Modal'
 
-const props = defineProps({
+defineProps({
     show: {
         default: false,
     },
