@@ -7,8 +7,6 @@ Front-end scaffolding for [laravel/fortify](https://github.com/laravel/fortify) 
 [![Stars](https://img.shields.io/github/stars/Kamona-WD/kui-laravel-fortify)](https://github.com/Kamona-WD/kui-laravel-fortify/stargazers)
 [![Total Downloads](https://img.shields.io/packagist/dt/kamona/kui-laravel-fortify.svg)](https://packagist.org/packages/kamona/kui-laravel-fortify)
 
-##### [Figma file](https://www.figma.com/community/file/1019844542917981418/)
-
 ##### [Laravel breeze version](https://github.com/Kamona-WD/kui-laravel-breeze/)
 
 #### ⚠️ Note
